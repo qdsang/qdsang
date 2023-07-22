@@ -1,0 +1,179 @@
+  <html>
+    <meta http-equiv="Content-Type" content="text/html" charset="utf-8">
+    <link rel="apple-touch-icon" sizes="180x180" href="images/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="images/favicon-16x16.png">
+    <link rel="manifest" href="site.webmanifest">
+    <link rel="mask-icon" href="images/safari-pinned-tab.svg" color="#5bbad5">
+    <meta name="msapplication-TileColor" content="#da532c">
+    <meta name="theme-color" content="#ffffff">
+  <meta http-equiv="origin-trial" content="AmkcLZt/IOnOxaYyFXAGdZuoo8kix+q0JajKnFtwps+dDhftiwIyCmCXuxeOo9vL+JS3WYNwXwCMCaA9Q7tkqQkAAABkeyJvcmlnaW4iOiJodHRwczovL2NhbmRhczEuZ2l0aHViLmlvOjQ0MyIsImZlYXR1cmUiOiJTZXJpYWwiLCJleHBpcnkiOjE2MTc3NTM1OTksImlzU3ViZG9tYWluIjp0cnVlfQ==">
+  <meta name="viewport" content="user-scalable=no">
+  <meta http-equiv="CACHE-CONTROL" content="NO-CACHE">
+  <head>
+    <link rel="stylesheet" href="css/normalize.css">
+    <link rel="stylesheet" href="css/skeleton.css">
+    <link rel="stylesheet" href="css/index.css">
+  </head>
+  
+  <body>
+    <div id="container">
+      <div class="row" id="serialdiv">  
+        <div class="eight columns">
+          <div class="two columns" id="viewdiv">
+            <label for="view">View</label>
+            <select class="u-full-width" id="view" onchange="switchView(viewIn.value)">
+              <option value="log" selected>📃Log  </option>
+              <option value="chart"       >📈Chart</option>
+              <option value="control"     >🎮Ctrl </option>
+              <option value="speedo"      >🚘Dash </option>
+            </select>
+          </div>
+          <div class="two columns" id="APIdiv">
+            <label for="API">API</label>
+            <select class="u-full-width" id="API" onchange="toggleAPI()">
+                <option value="serial" selected>Serial</option>
+                <option value="bluetooth">Ble</option>
+            </select>
+          </div>
+          <div class="two columns" id='bauddiv'>
+            <label for="baudrate">Baudrate</label>
+            <select class="u-full-width" id="baudrate">
+                <option value="9600" >9600 </option>
+                <option value="14400">14400</option>
+                <option value="19200">19200</option>
+                <option value="38400">38400</option>
+                <option value="57600">57600</option>
+                <option value="115200" selected>115200</option>
+            </select>
+          </div>
+          <div class="two columns" id="recdiv">
+            <label for="recin">Receive</label>
+            <select class="u-full-width" id="recin" onchange="toggleMode()">
+                <option value="ascii" selected>Ascii</option>
+                <option value="binary">Binary</option>
+                <option value="binarycur">Binary with Current</option>
+            </select>  
+          </div>
+          <div class="one columns" id="statsindiv">
+            <label for="stats">Stats</label>
+            <input type="checkbox" id="stats" onchange="toggleStats()">
+          </div>
+          <div class="one columns" id="watchindiv">
+            <label for="watch">Watch</label>
+            <input type="checkbox" id="watchin" checked>
+          </div>
+          <div class="two columns" id="chartindiv">
+            <label for="subplot">Subplot</label>
+            <select class="u-full-width" id="subplot" onchange="toggleSubplot()">
+              <option value="no" selected>No </option>
+              <option value="yes"        >Yes</option>
+            </select>
+          </div>
+          <div class="two columns" id="senddiv">
+            <label for="sendin">Protocol</label>
+            <select class="u-full-width" id="sendin" onchange="toggleMode()">
+              <option value="off" selected>Off  </option>
+              <option value="usart"       >Usart</option>
+              <option value="hovercar"    >Hovercar</option>
+              <option value="ibus"        >Ibus </option>
+            </select>  
+          </div>
+          <div class="two columns" id="ctrlindiv">
+            <label for="mixin">Mixer</label>
+            <select class="u-full-width" id="mixin" onchange="toggleMixer()">
+              <option id="optmix1" value="mix1" selected>↔ ↕</option>
+              <option id="optmix2" value="mix2">➕ ❌</option>
+              <option id="optmix3" value="mix3">❌ ➕</option>
+              <option id="optmix4" value="mix4">↕  ↕</option>
+            </select>
+          </div>
+          <div class="two columns" id="enginediv">
+            <label for="engine">Engine</label>
+            <select class="u-full-width" id="engine" onchange="toggleEngine()">
+              <option id="off" value="off" selected>🔇</option>
+              <option id="on"  value="on"          >🔈</option>
+            </select>
+          </div>
+        </div>
+        <div id="buttondiv">
+          <label for="pause"><br></label>
+          <button id="pause" class="button" type="button" onclick="pauseUpdate()"><ion-icon name="pause"></ion-icon></button>
+          <button id="trash" class="button" type="button" onclick="deleteData()" ><ion-icon name="trash"></ion-icon></button> 
+          <button id="connect" class="button" type="button" onclick="serial.connect()"><ion-icon name="flash"></ion-icon></button>
+        </div>
+      </div>
+      <div class="row" id="statsdiv">
+        <div class="nine columns"> 
+          <div class="two columns">
+            <label for="write">Write</label>
+            <input class="u-full-width" type="number" id="write" value="0" disabled>
+          </div>
+          <div class="two columns">
+            <label for="read">Read</label>
+            <input class="u-full-width" type="number" id="read" value="0" disabled>
+          </div>    
+          <div class="two columns">
+            <label for="success">Success</label>
+            <input class="u-full-width" type="number" id="success" value="0" disabled>
+          </div>
+          <div class="two columns">
+            <label for="skip">Skip</label>
+            <input class="u-full-width" type="number" id="skip" value="0" disabled>
+          </div>
+          <div class="two columns">
+            <label for="error">Error</label>
+            <input class="u-full-width" type="number" id="error" value="0" disabled>
+          </div>
+        </div>
+      </div>
+      <div class="row" id="commanddiv">
+        <div class="eight columns">
+          <div class="nine columns">
+            <label for="command">Command</label>
+            <input class="u-full-width" type="text" id="command" value="">
+          </div>
+          <div class="one columns">
+            <label for="cr">CR</label>
+            <input type="checkbox" id="cr" checked>
+          </div>
+          <div class="one columns"> 
+            <label for="lf">LF</label>
+            <input type="checkbox" id="lf" checked>
+          </div>
+        </div>
+        <div id="buttondiv2">
+          <label for="send"><br></label>
+          <button id="send"   class="button" type="button" onclick="sendCommand()" disabled="true"><ion-icon name="send"></ion-icon></button>
+          <button id="pause1" class="button" type="button" onclick="pauseUpdate()"><ion-icon name="pause"></ion-icon></button>
+          <button id="trash1" class="button" type="button" onclick="deleteData()" ><ion-icon name="trash"></ion-icon></button> 
+        </div>
+      </div>
+      <div id="outputdiv">
+        <div class="twelve columns">
+          <div class="u-full-width" id="loggerdiv"></div>
+          <div class="u-full-width" id="chartdiv"></div>
+        </div>
+      </div>
+      <canvas class="u-full-width" id="controlcnv"></canvas>
+      <canvas class="u-full-width" id="speedocnv"></canvas>
+    </div>
+
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@5.2.3/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule="" src="https://unpkg.com/ionicons@5.2.3/dist/ionicons/ionicons.js"></script>
+    
+    
+    <script type="text/javascript" src="js/struct.min.js"></script>
+    <script type="text/javascript" src="js/timer.js"></script>
+    <script type="text/javascript" src="js/log.js"></script>
+    <script type="text/javascript" src="js/serial.js"></script>
+    <script type="text/javascript" src="js/graph.js"></script>
+    <script type="text/javascript" src="js/speedo.js"></script>
+    <script type="text/javascript" src="js/engine.js"></script>
+    <script type="text/javascript" src="js/control.js"></script>
+    <script type="text/javascript" src="js/telemetry.js"></script>
+    <script type="text/javascript" src="js/index.js"></script>
+
+  </body>
+</html>
