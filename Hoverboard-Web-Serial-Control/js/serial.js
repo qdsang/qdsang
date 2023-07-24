@@ -1,3 +1,12 @@
+var serialDevices = [
+  {'vendorId': 1027, 'productId': 24577}, // FT232R USB UART
+  {'vendorId': 1155, 'productId': 22336}, // STM Electronics Virtual COM Port
+  {'vendorId': 4292, 'productId': 60000}, // CP210x
+  {'vendorId': 4292, 'productId': 60001}, // CP210x
+  {'vendorId': 4292, 'productId': 60002}, // CP210x
+  {'vendorId': 0x2e3c, 'productId': 0x5740}, // AT32 VCP
+]
+
 class Serial {
   constructor(size) {
     this.API = 'serial';
@@ -117,46 +126,47 @@ class Serial {
   }
 
   async connectSerial(){
-    if ("serial" in navigator) {
-
-      this.port = await navigator.serial.requestPort();
-      // Open and begin reading.
-      await this.port.open({
-        baudRate: baudrate.value
-      });
-      
-      // Update UI
-      this.setConnected();
- 
-      while (this.port.readable) {
-        this.inputStream = this.port.readable;
-        this.reader = this.inputStream.getReader();
-        
-        try{
-          while (true){
-            const { value, done } = await this.reader.read();
-            if (done) {
-              log.write("Reader canceled",2);
-              break;
-            }
+    var serial = navigator.serial || window.webserial;
+    // var serial = window.webserial;
+    // this.port = await serial.requestPort([], {usbControlInterfaceClass: 255, usbTransferInterfaceClass: 255});
+    // this.port = await serial.requestPort(serialDevices);
+    this.port = await serial.requestPort([]);
+    // Open and begin reading.
+    await this.port.open({
+      baudRate: baudrate.value
+    });
     
-            this.bufferWrite(value);
-            this.readLoop();
-            if (!this.connected) break;
-          }
-        }catch (error) {
-          // Handle non-fatal read error.
-          console.log(error,2);
-        } finally{
-          
-        }
-        if (!this.connected) break;   
-      }
+    // Update UI
+    this.setConnected();
 
-      this.reader.releaseLock();
-      this.port.close();
-      this.setDisconnected();
+    while (this.port.readable) {
+      this.inputStream = this.port.readable;
+      this.reader = this.inputStream.getReader();
+      
+      try{
+        while (true){
+          const { value, done } = await this.reader.read();
+          if (done) {
+            log.write("Reader canceled",2);
+            break;
+          }
+  
+          this.bufferWrite(value);
+          this.readLoop();
+          if (!this.connected) break;
+        }
+      }catch (error) {
+        // Handle non-fatal read error.
+        console.log(error,2);
+      } finally{
+        
+      }
+      if (!this.connected) break;   
     }
+
+    this.reader.releaseLock();
+    this.port.close();
+    this.setDisconnected();
   }
 
   connectBluetooth(){

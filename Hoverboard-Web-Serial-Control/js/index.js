@@ -54,7 +54,7 @@ window.addEventListener("load", function(event) {
   speedo = new Speedo(speedocnv);
   serial = new Serial(10000);
 
-  if( /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
+  if( /webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)) {
     // if on Mobile phone, only Web Bluetooth API is available
     API.remove(API.selectedIndex);
     bauddiv.style.display = "none";
@@ -65,7 +65,12 @@ window.addEventListener("load", function(event) {
       requestWakeLock();
       document.addEventListener('visibilitychange', handleVisibilityChange);
     }
-  }else{
+  } if( /Android/i.test(navigator.userAgent)) {
+    if ("usb" in navigator === false) {
+      API.remove(API.selectedIndex);
+      log.write('Web USB API not supported. ',2);
+    }
+  } else{
     // if on computer,remove Web Serial API if not available
     if ("serial" in navigator === false) {
       API.remove(API.selectedIndex);
