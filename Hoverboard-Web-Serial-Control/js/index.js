@@ -65,7 +65,7 @@ window.addEventListener("load", function(event) {
       requestWakeLock();
       document.addEventListener('visibilitychange', handleVisibilityChange);
     }
-  } if( /Android/i.test(navigator.userAgent)) {
+  } else if( /Android/i.test(navigator.userAgent)) {
     if ("usb" in navigator === false) {
       API.remove(API.selectedIndex);
       log.write('Web USB API not supported. ',2);
