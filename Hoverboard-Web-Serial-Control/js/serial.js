@@ -175,6 +175,9 @@ class Serial {
           optionalServices:[this.bluetoothService],
           //filters: [{ name: [this.bluetoothName] },{services: [this.bluetoothService]}],
           };
+    if (!navigator.bluetooth) {
+      alert("No support Bluetooth!!");
+    }
     navigator.bluetooth.requestDevice(options)
     .then(device => {
       //console.log(device);
