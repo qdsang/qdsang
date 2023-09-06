@@ -141,7 +141,8 @@ export default class Stlink {
         if (this.ver_api === 1) {
             throw new Warning(`ST-Link/${this._ver_str} is not supported, please upgrade firmware.`);
         }
-        if (this.ver_jtag < 21) {
+        // if (this.ver_jtag < 21) {
+        if (this.ver_jtag < 17) {
             throw new Warning(`ST-Link/${this._ver_str} is not recent firmware, please upgrade first - functionality is not guaranteed.`);
         }
     }
