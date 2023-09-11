@@ -206,7 +206,7 @@ async function stlink_read(task) {
     var size = member['size'];
     stat_up(key);
     // await sleep(1);
-    // filed_up[key] = parseInt(Math.random()*100);
+    // let val = parseInt(Math.random()*100);
 
     let memory = await stlink.read_memory(addr, size);
     let val = type_to(member, memory);
